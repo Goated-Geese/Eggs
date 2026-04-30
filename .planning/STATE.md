@@ -1,21 +1,21 @@
 # State
 
 **Project:** Pelican s&box egg (`Eggs` repo)  
-**Last updated:** 2026-04-30  
+**Last updated:** 2026-04-30 (discuss-phase 2)  
 
 ## Current focus
 
-- **Phase:** 1 — Research & stack confirmation  
-- **Status:** Execute complete — plan `01-01` verified; see `01-01-SUMMARY.md`  
-- **Resume file:** `.planning/phases/01-research-stack/01-CONTEXT.md`  
-- **Branch / checkpoint:** Phase 1 verification done; **next:** `/gsd-discuss-phase 2` (if needed) → `/gsd-plan-phase 2` → `/gsd-execute-phase 2` per ROADMAP  
+- **Phase:** 2 — Egg implementation  
+- **Status:** Discuss-phase complete — see `.planning/phases/02-egg-implementation/02-CONTEXT.md`  
+- **Resume file:** `.planning/phases/02-egg-implementation/02-CONTEXT.md`  
+- **Branch / checkpoint:** **Next:** `/gsd-plan-phase 2` → `/gsd-execute-phase 2`  
 
 ## Project reference
 
 See: `.planning/PROJECT.md` (updated 2026-04-30)
 
 **Core value:** Operators get a repeatable SteamCMD → native Linux s&box dedicated server egg for Pelican/Wings.  
-**Current focus:** Begin Phase 2 — egg JSON + install/startup scripts (depends on Phase 1 research in `01-RESEARCH.md` and `.planning/research/`).  
+**Current focus:** Plan and implement Phase 2 egg (`02-CONTEXT.md` locks layout, images, done/stop, variables, branches).  
 
 ## Notes
 
