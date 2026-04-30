@@ -45,7 +45,8 @@ Verified that Phase 1 research deliverables on disk satisfy the plan’s grep-ba
 
 | Task | Hash | Message |
 |------|------|-----------|
-| (aggregate) | _(filled after commit)_ | docs(01): execute plan 01 — verify Phase 1 research bundle |
+| 1-01-02 + summary | `66d90c1` | docs(01): execute plan 01 — verify Phase 1 research artifacts |
+| Research bundle (tracked) | `6202dec` | docs(01): add Phase 1 research bundle, plan, and validation |
 
 ## Deviations
 
