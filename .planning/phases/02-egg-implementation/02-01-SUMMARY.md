@@ -28,6 +28,12 @@ Created **`sbox/egg-sbox.json`** (PTDL_v2, SteamCMD **1892930**, install contain
 2. **Author** remains **`hello@example.com`** per plan — replace before publish.
 3. **+net_game_server_token** is always present in the startup string; when the variable is empty, some builds may still see an extra token. **TESTING.md** documents adjusting startup or using **EXTRA_ARGS** if needed.
 
+## Commits
+
+| Hash | Message |
+|------|---------|
+| `f882b00` | feat(sbox): add Pelican egg JSON, TESTING.md; trace EGG-01–05 in REQUIREMENTS |
+
 ## Self-Check
 
 **PASSED** — PowerShell `ConvertFrom-Json` on `sbox/egg-sbox.json` succeeds; greps for `PTDL_v2`, yolks, debian installer, `1892930` (×4), `sbox-server.exe`, `+game`/`+hostname`/`+net_query_port`, `done`+`sbox`, `quit`, and env variable names all satisfied.

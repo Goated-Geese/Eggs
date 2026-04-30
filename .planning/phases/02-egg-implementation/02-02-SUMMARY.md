@@ -17,6 +17,12 @@ metrics:
 
 Updated **`.planning/REQUIREMENTS.md`** traceability table and EGG-01–EGG-05 checklist lines to **Delivered** with pointers to **`sbox/egg-sbox.json`** and **`sbox/TESTING.md`**. DOC/VER rows remain Phase 3 **Pending**.
 
+## Commits
+
+| Hash | Message |
+|------|---------|
+| `f882b00` | feat(sbox): add Pelican egg JSON, TESTING.md; trace EGG-01–05 in REQUIREMENTS |
+
 ## Self-Check
 
 **PASSED** — Table lists primary evidence column; Phase 3 requirements unchanged.
