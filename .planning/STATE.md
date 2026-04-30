@@ -5,16 +5,17 @@
 
 ## Current focus
 
-- **Phase:** 1 — Research & stack confirmation (context gathered)  
+- **Phase:** 1 — Research & stack confirmation  
+- **Status:** Execute complete — plan `01-01` verified; see `01-01-SUMMARY.md`  
 - **Resume file:** `.planning/phases/01-research-stack/01-CONTEXT.md`  
-- **Branch / checkpoint:** Discuss-phase complete for Phase 1  
+- **Branch / checkpoint:** Phase 1 verification done; **next:** `/gsd-discuss-phase 2` (if needed) → `/gsd-plan-phase 2` → `/gsd-execute-phase 2` per ROADMAP  
 
 ## Project reference
 
 See: `.planning/PROJECT.md` (updated 2026-04-30)
 
 **Core value:** Operators get a repeatable SteamCMD → native Linux s&box dedicated server egg for Pelican/Wings.  
-**Current focus:** `/gsd-plan-phase 1` (or `/gsd-plan-phase 1 --skip-research` only if intentionally skipping researcher — not recommended).  
+**Current focus:** Begin Phase 2 — egg JSON + install/startup scripts (depends on Phase 1 research in `01-RESEARCH.md` and `.planning/research/`).  
 
 ## Notes
 
