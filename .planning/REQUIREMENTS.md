@@ -7,11 +7,11 @@
 
 ### Egg / Panel integration
 
-- [ ] **EGG-01**: Repo contains an importable Pelican egg definition (`PTDL_v2`-compatible JSON) with name, author, description, docker image reference(s), startup, config blocks, variables, install script
-- [ ] **EGG-02**: Install script uses SteamCMD to fetch/update dedicated server files into `/mnt/server`, exits `0` on success, fails visibly on error (per Pelican expectations)
-- [ ] **EGG-03**: Startup command invokes the **native Linux** dedicated server with documented placeholders for allocation/port and egg variables
-- [ ] **EGG-04**: Stop command and **done** startup detection configured so Wings marks RUNNING/STOPPED correctly
-- [ ] **EGG-05**: Variables cover game/package, server name, map, optional project path, extra args, player limits, update/branch options, and secrets (e.g. GSLT) with sane defaults and validation rules
+- [x] **EGG-01**: Repo contains an importable Pelican egg definition (`PTDL_v2`-compatible JSON) with name, author, description, docker image reference(s), startup, config blocks, variables, install script — **`sbox/egg-sbox.json`**
+- [x] **EGG-02**: Install script uses SteamCMD to fetch/update dedicated server files into `/mnt/server`, exits `0` on success, fails visibly on error (per Pelican expectations) — **`scripts.installation.script`** in `sbox/egg-sbox.json`
+- [x] **EGG-03**: Startup command invokes the **native Linux** dedicated server with documented placeholders for allocation/port and egg variables — **`startup`** field in `sbox/egg-sbox.json`
+- [x] **EGG-04**: Stop command and **done** startup detection configured so Wings marks RUNNING/STOPPED correctly — **`config.stop`**, **`config.startup`** in `sbox/egg-sbox.json`; refine **done** per **`sbox/TESTING.md`**
+- [x] **EGG-05**: Variables cover game/package, server name, map, optional project path, extra args, player limits, update/branch options, and secrets (e.g. GSLT) with sane defaults and validation rules — **`variables`** in `sbox/egg-sbox.json` (incl. **MAX_PLAYERS**, **STEAM_GAME_SERVER_TOKEN**, branch/install flags)
 
 ### Documentation
 
@@ -39,16 +39,16 @@
 
 ## Traceability
 
-| Requirement | Phase | Status |
-|-------------|-------|--------|
-| EGG-01 | Phase 2 | Pending |
-| EGG-02 | Phase 2 | Pending |
-| EGG-03 | Phase 2 | Pending |
-| EGG-04 | Phase 2 | Pending |
-| EGG-05 | Phase 2 | Pending |
-| DOC-01 | Phase 3 | Pending |
-| DOC-02 | Phase 3 | Pending |
-| VER-01 | Phase 3 | Pending |
+| Requirement | Phase | Status | Primary evidence |
+|-------------|-------|--------|------------------|
+| EGG-01 | Phase 2 | Delivered | `sbox/egg-sbox.json` |
+| EGG-02 | Phase 2 | Delivered | `sbox/egg-sbox.json` → `scripts.installation` |
+| EGG-03 | Phase 2 | Delivered | `sbox/egg-sbox.json` → `startup` |
+| EGG-04 | Phase 2 | Delivered | `sbox/egg-sbox.json` → `config`; operator refines **done** via `sbox/TESTING.md` |
+| EGG-05 | Phase 2 | Delivered | `sbox/egg-sbox.json` → `variables` |
+| DOC-01 | Phase 3 | Pending | — |
+| DOC-02 | Phase 3 | Pending | — |
+| VER-01 | Phase 3 | Pending | — |
 
 **Coverage:**
 
@@ -58,4 +58,4 @@
 
 ---
 *Requirements defined: 2026-04-30*  
-*Last updated: 2026-04-30 after roadmap creation*
+*Last updated: 2026-04-30 after Phase 2 execute (egg + TESTING.md)*
