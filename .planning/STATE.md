@@ -5,15 +5,16 @@
 
 ## Current focus
 
-- **Phase:** Not started (next: Phase 1 — Research & stack confirmation)  
-- **Branch / checkpoint:** Initialization complete  
+- **Phase:** 1 — Research & stack confirmation (context gathered)  
+- **Resume file:** `.planning/phases/01-research-stack/01-CONTEXT.md`  
+- **Branch / checkpoint:** Discuss-phase complete for Phase 1  
 
 ## Project reference
 
 See: `.planning/PROJECT.md` (updated 2026-04-30)
 
 **Core value:** Operators get a repeatable SteamCMD → native Linux s&box dedicated server egg for Pelican/Wings.  
-**Current focus:** Phase 1 research after `/gsd-plan-phase 1` or `/gsd-discuss-phase 1`.  
+**Current focus:** `/gsd-plan-phase 1` (or `/gsd-plan-phase 1 --skip-research` only if intentionally skipping researcher — not recommended).  
 
 ## Notes
 
