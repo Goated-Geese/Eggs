@@ -9,8 +9,7 @@ Validate the Pelican egg (`egg-sbox.json`) after import into Wings/Pelican. Phas
 1. Import **`sbox/egg-sbox.json`** per panel procedure.
 2. Create a server and run the **install** process.
 3. Expect **exit code 0**; on failure, read install logs and fix Steam login, disk, or network.
-4. On the node, confirm **`sbox-server.exe`** exists under:
-   **`/home/container/steamapps/common/sbox dedicated server/`** (or the same path under `/mnt/server` during install as appropriate for your node layout).
+4. On the node, confirm **`sbox-server.dll`** (and usually **`sbox-server.exe`**) exist. The egg runs **`dotnet sbox-server.dll`** on Linux; do not run **`./sbox-server.exe`** directly (PE binary → `Exec format error`). Typical layouts use **`/home/container/steamapps/common/sbox dedicated server/`** or files at **`/home/container/`** next to `steamapps`, `bin`, `steamcmd`, etc. The egg picks the server directory automatically.
 
 ## First boot (D-03)
 
