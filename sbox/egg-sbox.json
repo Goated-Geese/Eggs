@@ -7,7 +7,7 @@
   "exported_at": "2026-04-30T00:00:00Z",
   "name": "s&box",
   "author": "hello@example.com",
-  "description": "Native Linux s&box dedicated server via SteamCMD (App ID 1892930). Runtime: use a dotnet yolk (default ghcr.io/pelican-eggs/yolks:dotnet_10) and start with \u0060dotnet sbox-server.dll\u0060 \u2014 the shipped \u0060sbox-server.exe\u0060 is a Windows PE and will fail with Exec format error if invoked directly on Linux. Startup exports LD_LIBRARY_PATH to \u0060bin/linuxsteamrt64\u0060 so \u0060libengine2.so\u0060 resolves. If you still get NativeAssemblyLoadException for \u0060libengine2.so\u0060, run \u0060ldd bin/linuxsteamrt64/libengine2.so\u0060 in the container: missing GLIBC_2.38 / GLIBCXX means the stock Bookworm-based yolk is too old \u2014 switch the nest to a custom image with Ubuntu 24.04+ or Debian 13+ plus .NET 10, or use a Wine-based community egg (e.g. HyberHost gameforge-sbox-egg). Facepunch docs: https://sbox.game/dev/doc/networking/dedicated-servers/",
+  "description": "Native Linux s&box dedicated server via SteamCMD (App ID 1892930). Install forces Linux depots with \u0060+@sSteamCmdForcePlatformType linux\u0060; if you still see \u0060Missing configuration\u0060 or \u0060No subscription\u0060, set Beta Branch to \u0060staging\u0060, use SteamCMD login variables with an account that owns s&box, or refresh SteamCMD. Runtime: use a dotnet yolk (default ghcr.io/pelican-eggs/yolks:dotnet_10) and start with \u0060dotnet sbox-server.dll\u0060 \u2014 the shipped \u0060sbox-server.exe\u0060 is a Windows PE and will fail with Exec format error if invoked directly on Linux. Startup exports LD_LIBRARY_PATH to \u0060bin/linuxsteamrt64\u0060 so \u0060libengine2.so\u0060 resolves. If you still get NativeAssemblyLoadException for \u0060libengine2.so\u0060, run \u0060ldd bin/linuxsteamrt64/libengine2.so\u0060 in the container: missing GLIBC_2.38 / GLIBCXX means the stock Bookworm-based yolk is too old \u2014 switch the nest to a custom image with Ubuntu 24.04+ or Debian 13+ plus .NET 10, or use a Wine-based community egg (e.g. HyberHost gameforge-sbox-egg). Facepunch docs: https://sbox.game/dev/doc/networking/dedicated-servers/",
   "features": [
     "steam_disk_space"
   ],
@@ -24,7 +24,7 @@
   },
   "scripts": {
     "installation": {
-      "script": "#!/bin/bash\n# s&box dedicated server \u2014 SteamCMD install (Pelican). Server root: /mnt/server\nset -euo pipefail\n\nif [[ \"${STEAM_USER:-}\" == \"\" ]] || [[ \"${STEAM_PASS:-}\" == \"\" ]]; then\n  echo \"Using anonymous Steam login.\"\n  STEAM_USER=anonymous\n  STEAM_PASS=\"\"\n  STEAM_AUTH=\"\"\nfi\n\ncd /tmp\nmkdir -p /mnt/server/steamcmd\ncurl -sSL -o /tmp/steamcmd.tar.gz https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz\ntar -xzf /tmp/steamcmd.tar.gz -C /mnt/server/steamcmd\nmkdir -p /mnt/server/steamapps\ncd /mnt/server/steamcmd\nchown -R root:root /mnt 2>/dev/null || true\nexport HOME=/mnt/server\n\nSTEAM_APPID=\"${STEAM_APPID:-1892930}\"\n\n./steamcmd.sh +force_install_dir /mnt/server +login \"${STEAM_USER}\" \"${STEAM_PASS}\" ${STEAM_AUTH:-} \\\n  +app_update \"${STEAM_APPID}\" $( [[ -z \"${BETA_BRANCH:-}\" ]] || printf %s \"-beta ${BETA_BRANCH}\" ) $( [[ -z \"${BETA_PASSWORD:-}\" ]] || printf %s \"-betapassword ${BETA_PASSWORD}\" ) ${INSTALL_FLAGS:-} validate +quit\n\nmkdir -p /mnt/server/.steam/sdk32 /mnt/server/.steam/sdk64\ncp -v linux32/steamclient.so /mnt/server/.steam/sdk32/steamclient.so 2>/dev/null || true\ncp -v linux64/steamclient.so /mnt/server/.steam/sdk64/steamclient.so 2>/dev/null || true\n\nif [[ ! -f \"/mnt/server/steamapps/common/sbox dedicated server/sbox-server.dll\" ]] && [[ ! -f \"/mnt/server/steamapps/common/sbox dedicated server/sbox-server.exe\" ]] && [[ ! -f \"/mnt/server/sbox-server.dll\" ]] && [[ ! -f \"/mnt/server/sbox-server.exe\" ]]; then\n  echo \"Install verification failed: sbox-server.dll / sbox-server.exe not found under steamapps path or server root.\"\n  find /mnt/server -maxdepth 5 \\( -name \"sbox-server.dll\" -o -name \"sbox-server.exe\" \\) 2>/dev/null | head -20 || true\n  exit 1\nfi\n\necho \"Installation completed successfully.\"\nexit 0\n",
+      "script": "#!/bin/bash\n# s&box dedicated server \u2014 SteamCMD install (Pelican). Server root: /mnt/server\nset -euo pipefail\n\n# Anonymous login unless BOTH STEAM_USER and STEAM_PASS are set.\nif [[ -n \"${STEAM_USER:-}\" && \"${STEAM_USER,,}\" != \"anonymous\" ]]; then\n  if [[ -z \"${STEAM_PASS:-}\" ]]; then\n    echo \"Error: SteamCMD Login Username is set but password is empty. Fill SteamCMD Login Password or clear the username for anonymous.\"\n    exit 1\n  fi\n  echo \"Using Steam account login for SteamCMD.\"\nelse\n  echo \"Using anonymous Steam login.\"\n  STEAM_USER=anonymous\n  STEAM_PASS=\"\"\n  STEAM_AUTH=\"\"\nfi\n\ncd /tmp\nmkdir -p /mnt/server/steamcmd\ncurl -sSL -o /tmp/steamcmd.tar.gz https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz\ntar -xzf /tmp/steamcmd.tar.gz -C /mnt/server/steamcmd\nmkdir -p /mnt/server/steamapps\ncd /mnt/server/steamcmd\nchown -R root:root /mnt 2>/dev/null || true\nexport HOME=/mnt/server\n\nSTEAM_APPID=\"${STEAM_APPID:-1892930}\"\n\n# Without this, multi-OS apps can fail with: ERROR! Failed to install app (Missing configuration)\necho \"SteamCMD: forcing Linux depots (@sSteamCmdForcePlatformType linux) for app ${STEAM_APPID}...\"\n\nif ! ./steamcmd.sh +@sSteamCmdForcePlatformType linux +force_install_dir /mnt/server +login \"${STEAM_USER}\" \"${STEAM_PASS}\" ${STEAM_AUTH:-} \\\n  +app_update \"${STEAM_APPID}\" $( [[ -z \"${BETA_BRANCH:-}\" ]] || printf %s \"-beta ${BETA_BRANCH}\" ) $( [[ -z \"${BETA_PASSWORD:-}\" ]] || printf %s \"-betapassword ${BETA_PASSWORD}\" ) ${INSTALL_FLAGS:-} validate +quit; then\n  echo \"\"\n  echo \"SteamCMD failed. If you saw (Missing configuration): ensure this egg uses +@sSteamCmdForcePlatformType linux (shipped), try Beta Branch = staging, use SteamCMD Login Username+Password with an account that owns s&box, or reinstall after deleting steamcmd under the server install path.\"\n  exit 1\nfi\n\nmkdir -p /mnt/server/.steam/sdk32 /mnt/server/.steam/sdk64\ncp -v linux32/steamclient.so /mnt/server/.steam/sdk32/steamclient.so 2>/dev/null || true\ncp -v linux64/steamclient.so /mnt/server/.steam/sdk64/steamclient.so 2>/dev/null || true\n\nif [[ ! -f \"/mnt/server/steamapps/common/sbox dedicated server/sbox-server.dll\" ]] && [[ ! -f \"/mnt/server/steamapps/common/sbox dedicated server/sbox-server.exe\" ]] && [[ ! -f \"/mnt/server/sbox-server.dll\" ]] && [[ ! -f \"/mnt/server/sbox-server.exe\" ]]; then\n  echo \"Install verification failed: sbox-server.dll / sbox-server.exe not found under steamapps path or server root.\"\n  find /mnt/server -maxdepth 5 \\( -name \"sbox-server.dll\" -o -name \"sbox-server.exe\" \\) 2>/dev/null | head -20 || true\n  exit 1\nfi\n\necho \"Installation completed successfully.\"\nexit 0\n",
       "container": "ghcr.io/parkervcp/installers:debian",
       "entrypoint": "bash"
     }
@@ -122,7 +122,7 @@
     },
     {
       "name": "Beta Branch",
-      "description": "SteamCMD beta branch (e.g. staging); empty = default.",
+      "description": "SteamCMD beta branch; empty = default/public. Facepunch documents \u0060-staging\u0060 for dedicated server; try \u0060staging\u0060 if install returns Missing configuration or an outdated public depot.",
       "env_variable": "BETA_BRANCH",
       "default_value": "",
       "user_viewable": true,
@@ -148,6 +148,36 @@
       "user_viewable": true,
       "user_editable": true,
       "rules": "nullable|string|max:128",
+      "field_type": "text"
+    },
+    {
+      "name": "SteamCMD Login Username",
+      "description": "Optional. Set together with SteamCMD Login Password to download as your Steam user (e.g. if anonymous fails with No subscription). Leave empty for anonymous.",
+      "env_variable": "STEAM_USER",
+      "default_value": "",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "nullable|string|max:64",
+      "field_type": "text"
+    },
+    {
+      "name": "SteamCMD Login Password",
+      "description": "Optional. Password for SteamCMD account login. Required if SteamCMD Login Username is set.",
+      "env_variable": "STEAM_PASS",
+      "default_value": "",
+      "user_viewable": false,
+      "user_editable": true,
+      "rules": "nullable|string|max:128",
+      "field_type": "text"
+    },
+    {
+      "name": "SteamCMD Login Guard Code",
+      "description": "Optional third argument to +login (e.g. Steam Guard code) when using account login.",
+      "env_variable": "STEAM_AUTH",
+      "default_value": "",
+      "user_viewable": false,
+      "user_editable": true,
+      "rules": "nullable|string|max:32",
       "field_type": "text"
     },
     {
