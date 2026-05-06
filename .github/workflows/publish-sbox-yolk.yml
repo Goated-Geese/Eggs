@@ -1,0 +1,46 @@
+# Build and push sbox/yolk-dotnet10-noble to GitHub Container Registry (GHCR).
+# Image: ghcr.io/goated-geese/sbox-dotnet10-noble:latest
+# Requires: repo Settings → Actions → General → Workflow permissions → Read and write (for GITHUB_TOKEN package writes).
+
+name: Publish sbox-dotnet10-noble yolk
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "sbox/yolk-dotnet10-noble/**"
+      - ".github/workflows/publish-sbox-yolk.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: publish-sbox-yolk
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ./sbox/yolk-dotnet10-noble
+          file: ./sbox/yolk-dotnet10-noble/Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: ghcr.io/goated-geese/sbox-dotnet10-noble:latest
